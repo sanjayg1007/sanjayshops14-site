@@ -1,0 +1,171 @@
+---
+// This page only arranges the content. To change any words,
+// edit src/data/resume.ts instead.
+import Base from "@layouts/Base.astro";
+import {
+  person, facts, lifecycle, summary, expertise, experience,
+  earlierCareer, ai, education, certifications, tools,
+} from "@data/resume";
+
+const year = new Date().getFullYear();
+---
+
+<Base title={`${person.name}, ${person.title}`} description={person.headline}>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="band">
+    <div class="wrap">
+      <header class="top">
+        <a class="name" href="#">{person.name}</a>
+        <nav aria-label="Sections">
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#expertise">Expertise</a></li>
+            <li><a href="#credentials">Credentials</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <div>
+          <p class="who">{person.title}</p>
+          <h1>{person.headline}</h1>
+          <p class="avail">{person.availability}</p>
+          <div class="actions">
+            <a class="btn primary" href={`mailto:${person.email}`}>Email me</a>
+            <a class="btn" href={person.linkedin}>LinkedIn profile</a>
+            {person.resumePdf && <a class="btn" href={person.resumePdf}>Download résumé (PDF)</a>}
+          </div>
+        </div>
+        <dl class="facts">
+          {facts.map((f) => (
+            <div><dt>{f.label}</dt><dd>{f.value}</dd></div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="rail" aria-labelledby="rail-title">
+        <h2 id="rail-title">Programmes I've delivered across the life of a trade</h2>
+        <ol>
+          {lifecycle.map((s, i) => (
+            <li>
+              <span class="step">Stage {i + 1} of {lifecycle.length}</span>
+              <h3>{s.stage}</h3>
+              <p>{s.work}</p>
+              <span class="where">{s.where}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </div>
+  </div>
+
+  <main id="main" class="wrap">
+    <section class="sec" id="about">
+      <h2>About</h2>
+      <div>
+        {summary.map((p, i) => <p class={i === 0 ? "lead" : undefined}>{p}</p>)}
+      </div>
+    </section>
+
+    <section class="sec" id="experience">
+      <h2>Experience</h2>
+      <div>
+        <ol class="jobs">
+          {experience.map((j) => (
+            <li class="job">
+              <div class="dates">{j.dates}</div>
+              <div>
+                <h3>{j.role}</h3>
+                <p class="org">{j.org}, {j.place}</p>
+                {j.designation && <p class="desig">{j.designation}</p>}
+                <p class="what">{j.summary}</p>
+                <details>
+                  <summary>
+                    <span class="more">Show {j.highlights.length} highlights</span>
+                    <span class="less">Hide highlights</span>
+                  </summary>
+                  <ul>{j.highlights.map((h) => <li>{h}</li>)}</ul>
+                </details>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <div class="earlier">
+          <h3>Earlier career</h3>
+          <ul>{earlierCareer.map((e) => <li>{e}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="expertise">
+      <h2>Expertise</h2>
+      <div>
+        <div class="groups">
+          {expertise.map((g) => (
+            <div>
+              <h3>{g.group}</h3>
+              <ul>{g.items.map((i) => <li>{i}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="ai">
+      <h2>Working with AI</h2>
+      <div>
+        <p class="lead">{ai.intro}</p>
+        <ul class="tags">{ai.skills.map((s) => <li>{s}</li>)}</ul>
+      </div>
+    </section>
+
+    <section class="sec" id="credentials">
+      <h2>Credentials</h2>
+      <div>
+        <div class="creds">
+          <div>
+            <h3>Education</h3>
+            <ul>
+              {education.map((e) => (
+                <li><strong>{e.name}</strong><span>{e.school}{e.year ? `, ${e.year}` : ""}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3>Certifications</h3>
+            <ul>
+              {certifications.map((c) => (
+                <li><strong>{c.name}</strong><span>{c.issuer}{c.year ? `, ${c.year}` : ""}</span></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div class="tools">
+          <h3>Tools and platforms</h3>
+          <ul class="tags">{tools.map((t) => <li>{t}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="contact" id="contact">
+    <div class="wrap">
+      <h2>Have a transformation programme that needs steering?</h2>
+      <p>{person.availability} The quickest way to reach me is email or LinkedIn.</p>
+      <ul class="lines">
+        <li><span>Email</span><a href={`mailto:${person.email}`}>{person.email}</a></li>
+        <li><span>LinkedIn</span><a href={person.linkedin}>{person.linkedin.replace("https://www.", "")}</a></li>
+        {person.showPhone && <li><span>Phone</span><a href={`tel:${person.phone.replace(/[^+\d]/g, "")}`}>{person.phone}</a></li>}
+        <li><span>Based in</span>{person.location}</li>
+      </ul>
+      <div class="actions">
+        <a class="btn primary" href={`mailto:${person.email}`}>Email me</a>
+        {person.resumePdf && <a class="btn" href={person.resumePdf}>Download résumé (PDF)</a>}
+      </div>
+      <p class="small">© {year} {person.name}</p>
+    </div>
+  </footer>
+</Base>
